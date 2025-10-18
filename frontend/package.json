@@ -1,0 +1,9 @@
+{
+	"name": "zeichen",
+	"version": "0.0.0",
+	"description": "Block-based note-taking app.",
+	"private": true,
+	"devDependencies": {
+		"@biomejs/biome": "2.2.6"
+	}
+}
