@@ -30,7 +30,7 @@ const MyNotesPage = ({ loaderData }: Route.ComponentProps) => {
 				<div className="w-[640px] h-12 left-0 top-[320px] absolute opacity-25 bg-lt-primary dark:bg-dk-primary" />
 				<div className="w-2 h-12 left-0 top-[320px] absolute bg-lt-primary dark:bg-dk-primary" />
 			</div>
-			<div className="w-full flex-1 max-w-[1440px] inline-flex justify-start items-start">
+			<div className="relative w-full flex-1 max-w-[1440px] inline-flex justify-start items-start">
 				<div className="w-96 self-stretch inline-flex flex-col justify-between items-center">
 					<div className="self-stretch flex flex-col justify-start items-center">
 						<div className="self-stretch pb-16 flex flex-col justify-start items-start">
@@ -182,7 +182,7 @@ const MyNotesPage = ({ loaderData }: Route.ComponentProps) => {
 					<div className="w-96 left-0 top-[186px] absolute inline-flex justify-start items-center gap-4">
 						<div className="w-96 h-12 left-0 top-0 absolute opacity-10 bg-lt-primary dark:bg-dk-primary" />
 						<div className="w-1 h-12 bg-slate-400" />
-						<div className="flex-1 inline-flex flex-col justify-start items-start gap-1">
+						<div className="relative flex-1 inline-flex flex-col justify-start items-start gap-1">
 							<div className="self-stretch inline-flex justify-start items-center gap-2">
 								<img
 									className="size-4 rounded-lg"
