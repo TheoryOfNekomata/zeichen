@@ -1,0 +1,25 @@
+[package]
+name = "zeichen-api"
+version = "0.1.0"
+edition = "2024"
+authors = ["Sheape <paulpare@protonmail.com>"]
+description = "Backend REST API for Zeichen."
+repository = "https://github.com/TheoryOfNekomata/zeichen"
+
+[lints.rust]
+unsafe_code = "forbid"
+unused = { level = "allow", priority = -1 }
+
+[dependencies]
+axum = { version = "0.8.8", features = ["multipart"] }
+chrono = { version = "0.4.43", features = ["serde"] }
+chrono-tz = "0.10.4"
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.149"
+sqlx = { version = "0.8.6", features = [
+  "chrono",
+  "postgres",
+  "runtime-tokio-rustls",
+  "uuid",
+] }
+tokio = { version = "1.49.0", features = ["full"] }
