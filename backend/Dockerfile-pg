@@ -1,0 +1,5 @@
+# This dockerfile is to have postgres with `pg_cron` extension installed.
+FROM postgres:18
+
+RUN apt-get update && apt-get install -y postgresql-18-cron && rm -rf /var/lib/apt/lists/*
+RUN echo "shared_preload_libraries = 'pg_cron'" >> /usr/share/postgresql/postgresql.conf.sample

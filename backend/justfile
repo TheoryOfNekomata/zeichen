@@ -5,4 +5,7 @@ run:
     doppler run -- cargo run
 
 migrate:
-    sqlx migrate run
+    doppler run -- just _migrate
+
+_migrate:
+    sqlx migrate run --database-url=${ADMIN_DATABASE_URL}
