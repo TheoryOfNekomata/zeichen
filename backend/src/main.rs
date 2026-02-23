@@ -1,10 +1,14 @@
 mod config;
 mod error;
+mod middleware;
+mod service;
 
 use crate::config::load_config;
+use crate::service::api_v1_routes;
 pub use error::{Error, Result};
+use middleware::log_middleware;
 
-use axum::{Json, Router, routing::get};
+use axum::{Json, Router, middleware as mw, routing::get};
 use serde_json::json;
 use sqlx::{PgPool, postgres::PgPoolOptions};
 use tracing::info;
@@ -46,12 +50,13 @@ async fn main() -> core::result::Result<(), Box<dyn std::error::Error>> {
 
     let shared_state = AppState { db: Arc::new(pool) };
 
-    let app = Router::new().route(
-        "/",
-        get(|| async { Json(json!({ "message": "Welcome to Zeichen API" })) }),
-    );
-    //.nest("/api/v1", api_v1_routes(shared_state.clone()).await)
-    //.layer(mw::map_response(log_middleware));
+    let app = Router::new()
+        .route(
+            "/",
+            get(|| async { Json(json!({ "message": "Welcome to Zeichen API" })) }),
+        )
+        .nest("/api/v1", api_v1_routes(shared_state.clone()).await)
+        .layer(mw::map_response(log_middleware));
 
     // run our app with hyper, listening globally on port 8080
     let listener = tokio::net::TcpListener::bind(format!("0.0.0.0:{}", config.PORT))
