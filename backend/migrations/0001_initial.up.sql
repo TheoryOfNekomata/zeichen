@@ -15,6 +15,9 @@ GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO web_backend_public;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public
 GRANT USAGE, SELECT ON SEQUENCES TO web_backend_public;
 
+-- Extensions
+CREATE EXTENSION IF NOT EXISTS pg_cron;
+
 CREATE OR REPLACE FUNCTION set_updated_at()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -208,6 +211,18 @@ CREATE TABLE IF NOT EXISTS "user_credentials" (
     "updated_password_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
     PRIMARY KEY("id")
 );
+CREATE TABLE IF NOT EXISTS "user_sessions" (
+	"id" UUID NOT NULL UNIQUE,
+	"user_id" UUID NOT NULL,
+	"user_agent" TEXT,
+	"ip_address" INET,
+	"data" JSONB NOT NULL,
+	"created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
+	"expires_at" TIMESTAMPTZ NOT NULL,
+	PRIMARY KEY("id")
+);
+CREATE INDEX "user_sessions_index_0"
+ON "user_sessions" ("user_id", "expires_at");
 
 COMMENT ON COLUMN "user_credentials"."password_hash" IS 'Should be hashed with argon2';
 CREATE INDEX "user_credentials_index_0" ON "user_credentials" ("user_id");
@@ -368,6 +383,7 @@ CREATE TRIGGER tr_file_uploads_updated BEFORE UPDATE ON "file_uploads" FOR EACH 
 
 -- Foreign Key Constraints with ON DELETE CASCADE where applicable
 ALTER TABLE "user_credentials" ADD FOREIGN KEY("user_id") REFERENCES "users"("id") ON DELETE CASCADE;
+ALTER TABLE "user_sessions" ADD FOREIGN KEY("user_id") REFERENCES "users"("id") ON DELETE CASCADE;
 ALTER TABLE "files" ADD FOREIGN KEY("file_upload_id") REFERENCES "file_uploads"("id") ON DELETE SET NULL;
 ALTER TABLE "databases" ADD FOREIGN KEY("cover") REFERENCES "files"("id") ON DELETE SET NULL;
 ALTER TABLE "databases" ADD FOREIGN KEY("icon") REFERENCES "icons"("id") ON DELETE SET NULL;
@@ -406,3 +422,7 @@ ALTER TABLE "comment_rich_text_links" ADD FOREIGN KEY("rich_text_id") REFERENCES
 
 ALTER TABLE "comment_attachment_links" ADD FOREIGN KEY("comment_id") REFERENCES "comments"("id") ON DELETE CASCADE;
 ALTER TABLE "comment_attachment_links" ADD FOREIGN KEY("file_id") REFERENCES "files"("id") ON DELETE CASCADE;
+
+SELECT cron.schedule('session-cleanup', '0 * * * *', $$
+    DELETE FROM sessions WHERE expires_at < now();
+$$);

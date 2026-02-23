@@ -43,6 +43,8 @@ DROP TABLE IF EXISTS "user_credentials";
 
 DROP TABLE IF EXISTS "users";
 
+DROP TABLE IF EXISTS "user_sessions";
+
 -- 4. DROP TYPES (Enums)
 DROP TYPE IF EXISTS "data_rto_type";
 
