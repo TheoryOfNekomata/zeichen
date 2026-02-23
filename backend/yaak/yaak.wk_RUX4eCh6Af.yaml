@@ -1,0 +1,15 @@
+type: workspace
+model: workspace
+id: wk_RUX4eCh6Af
+createdAt: 2026-02-23T02:41:04.072103799
+updatedAt: 2026-02-23T02:44:54.688385940
+authentication: {}
+authenticationType: null
+description: ''
+headers: []
+name: Zeichen
+encryptionKeyChallenge: null
+settingValidateCertificates: true
+settingFollowRedirects: true
+settingRequestTimeout: 30000
+settingDnsOverrides: []
